@@ -6,8 +6,14 @@
 
         {{-- Form --}}
 
-        <form action="">
+        <form :action="mode === 'edit' ? | `/products/${form.id}` : '{{ route('products.store') }}'" method="POST"
+            enctype="multipart/form-data">
 
+            @csrf
+
+            <template x-if="mode === 'edit'">
+                <input type="hidden" name="_method" value="PUT" />
+            </template>
 
             {{-- Product name --}}
             <div class="mb-3">
@@ -16,6 +22,12 @@
                 <input type="text" name="name" id="name"
                     class="w-full rounded border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-purple-500"
                     placeholder="Product Name">
+
+                @error('name')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
+
             </div>
 
             {{-- price and status --}}
@@ -27,6 +39,11 @@
                     <input type="text" id="price" name="price"
                         class="w-full rounded border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-purple-500"
                         placeholder="Product Price">
+
+                    @error('price')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
+
                 </div>
 
                 {{-- Status --}}
@@ -40,6 +57,12 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+
+                    @error('status')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
+
+
                 </div>
             </div>
 
@@ -50,6 +73,11 @@
                 <textarea name="description" id="description"
                     class="w-full rounded border border-gray-300 px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-purple-500"
                     placeholder="Description ..."></textarea>
+
+                @error('description')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
             </div>
 
             {{-- Image upload --}}
@@ -67,6 +95,21 @@
                     <p class="text-xs text-gray-500 mt-1.5">You can select multiple images</p>
                 </div>
             </div>
+
+            {{-- Server side --}}
+            @error('images')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
+
+
+            {{-- Render client side validation --}}
+            <div class="tex-red-600 text-sm space-y-1">
+                <template x-for="(error, index) in errors" :key="index">
+                    <div x-text="error" class="text-red-500"></div>
+                </template>
+
+            </div>
+
 
 
             {{-- Image Preview --}}

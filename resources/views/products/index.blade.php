@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div x-data="productManager()" class="py-4">
+    <div x-data="productManager()" x-init="init()" class="py-4">
 
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Products list</h1>
@@ -47,6 +47,18 @@
 
         {{-- Include product modal form --}}
         @include('products.partials.product-modal')
+
+        {{-- If any errors --}}
+        @if ($errors->any())
+            <script>
+                document.addEventListener('alpine:init', () => {
+                    Alpine.store('productStore', {
+                        isModalOpen: true,
+                    });
+                });
+            </script>
+        @endif
+
     </div>
 @endsection
 
@@ -61,6 +73,14 @@
                 form: productManager.defaultForm(),
                 imagePreviews: [],
                 errors: [],
+
+                //Init lifecycle
+                init() {
+                    if (Alpine.store('productStore')?.isModalOpen) {
+                        this.openModal('create');
+                        Alpine.store('productStore').isModalOpen = false;
+                    }
+                },
 
                 //open modal
                 openModal(type) {
