@@ -77,6 +77,11 @@
 
                         <img :src="img.url" class="w-full h-full object-cover" />
 
+                        {{-- Button remove --}}
+                        <button @click="removeImage(index)" type="button"
+                            class="cursor-pointer z-999 absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded opacity-90 group-hover:opacity-100 transition"
+                            title="remove">X</button>
+
                     </div>
 
                 </template>

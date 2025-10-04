@@ -112,6 +112,23 @@
                         }
                     })
                 },
+
+                //Handle image remove
+                removeImage(index) {
+                    const image = this.imagePreviews[index];
+
+                    if (image.type === 'existing') {
+                        this.form.existingImages = this.form.existingImages.filter(path => path !== image.featured_image);
+                    } else if (image.type === 'new') {
+                        const fileIndex = this.form.images.findIndex(file => URL.createObjectURL(file) === image.url);
+
+                        if (fileIndex !== -1) {
+                            this.form.images.splice(fileIndex, 1);
+                        }
+                    }
+
+                    this.imagePreviews.splice(index, 1);
+                }
             };
         }
 
